@@ -4,7 +4,7 @@ class Mvcer {
 	
 	private static $_model, $_view, $_base;
 	
-	public static function run() {
+	public static function run($defaultModel = NULL, $defaultView = "index") {
 		
 		//echo  $_SERVER['PHP_SELF'];
 		
@@ -28,7 +28,7 @@ class Mvcer {
 		self::$_base = dirname($_SERVER['PHP_SELF']);
 		
 		// get controller
-		self::$_model = $_model = $params[$idx++];
+		self::$_model = $_model = $params[$idx] ?  $params[$idx++] : $defaultModel;
 		$cn = $_model . "Controller";
 		
 		if (!class_exists($cn)) {
@@ -40,7 +40,7 @@ class Mvcer {
 		$c = new $cn;
 		
 		// get controller method
-		self::$_view = $_view = $params[$idx] != "" ? $params[$idx++] : "index";
+		self::$_view = $_view = $params[$idx] ? $params[$idx++] : $defaultView;
 		if (!is_callable(array($c, $_view))) {
 		
 			// todo: add error page functionality
@@ -72,6 +72,8 @@ class Mvcer {
 					echo("View '$_view' not found for model '$_model'.");
 					return;
 				}
+				
+				$model = $r->getSubject();
 				include $vf;
 			}
 			elseif ($r->getAction() == Action::JSON) {

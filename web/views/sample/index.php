@@ -3,12 +3,10 @@
 <title>Sample - Index</title>
 </head>
 <body>
-<?php
-global $models;
-?>
-<? if ($models): ?>
 	<table>
-<? foreach ($models as $key => $value): ?>
+		<tr><th>name</th></tr>
+<? if ($model): ?>
+<? foreach ($model as $value): ?>
 		<tr>
 			<td>
 				<a href="<?=Mvcer::buildUrl('delete',$value->id)?>">delete</a>
@@ -16,8 +14,8 @@ global $models;
 			<td><?=$value->name?></td>
 		</tr>
 <? endforeach; ?>
-	</table>
 <? endif; ?>
+	</table>
 	<a href="<?=Mvcer::buildUrl('add')?>">Add</a>
 </body>
 </html>

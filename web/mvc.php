@@ -9,5 +9,5 @@ function load_class($class_name) {
 }
 spl_autoload_register("load_class");
 
-Mvcer::run();
+Mvcer::run("sample");
 ?>

@@ -38,10 +38,9 @@ class sampleController {
 	
 	public function index() {
 	
-		//global $models;
-		//$models = R::findAll("sample", "order by id");
+		//$model = R::findAll("sample", "order by id");
 	
-		return new Result(Action::VIEW);
+		return new Result(Action::VIEW, $model);
 	}
 }
 
