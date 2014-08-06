@@ -54,14 +54,19 @@ class Mvcer {
 		// prevent controller from outputting response
 		ob_start();
 		
-		// call controller method
-		$r = call_user_func(array($c, $_view), $id);
+		try {
+
+			// call controller method
+			$r = call_user_func(array($c, $_view), $id);
+
+		} catch (exception $e) {
+
+			$r = new Result(Action::SHARED, "error");
+		}
 		
 		// throw away any response
 		ob_end_clean();
-		
-		//echo self::BuildUrl("index");
-		
+
 		// call view
 		if (!is_null($r)) {
 		

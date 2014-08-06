@@ -42,6 +42,11 @@ class sampleController {
 	
 		return new Result(Action::VIEW, $model);
 	}
+
+	public function fail() {
+
+		throw new exception("test");
+	}
 }
 
 ?>
