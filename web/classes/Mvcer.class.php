@@ -4,6 +4,8 @@ class Mvcer {
 	
 	private static $_model, $_view, $_base;
 	
+	public static $layout = "_layout";
+
 	public static function run($defaultModel = NULL, $defaultView = "index") {
 		
 		//echo  $_SERVER['PHP_SELF'];
@@ -66,36 +68,60 @@ class Mvcer {
 		
 		// throw away any response
 		ob_end_clean();
-
-		// call view
-		if (!is_null($r)) {
 		
-			if ($r->getAction() == Action::VIEW) {
-			
-				$vf = "views/$_model/$_view.php";
-				if (!file_exists($vf)) {
-					echo("View '$_view' not found for model '$_model'.");
-					return;
-				}
-				
-				$model = $r->getSubject();
-				include $vf;
+		if (is_null($r)) return;
+
+		if ($r->getAction() == Action::VIEW) {
+
+			$vf = "views/$_model/$_view.php";
+			if (!file_exists($vf)) {
+				echo("View '$_view' not found for model '$_model'.");
+				return;
 			}
-			elseif ($r->getAction() == Action::JSON) {
-				header("Content-type: application/json"); 
-				echo json_encode($r->getSubject());
-			}
-			elseif ($r->getAction() == Action::SHARED) {
-			
-				$share = $r->getSubject();
-				$vf = "views/shared/$share.php";
-				if (!file_exists($vf)) {
-					echo("Shared view '$share' not found.");
-					return;
-				}
-				include $vf;
-			}
+
+			self::renderView($vf,
+				$r->getUseLayout(),
+				$r->getSubject());
 		}
+		elseif ($r->getAction() == Action::JSON) {
+
+			header("Content-type: application/json");
+			echo json_encode($r->getSubject());
+		}
+		elseif ($r->getAction() == Action::SHARED) {
+
+			$share = $r->getSubject();
+			$vf = "views/shared/$share.php";
+			if (!file_exists($vf)) {
+				echo("Shared view '$share' not found.");
+				return;
+			}
+			
+			self::renderView($vf,
+				$r->getUseLayout(),
+				null);
+		}
+	}
+
+	private static function renderView($path, $useLayout, $model) {
+
+		if ($useLayout) {
+
+			$layout = self::$layout;
+			$lf = "views/shared/$layout.php";
+			if (!file_exists($lf)) {
+				echo("Layout page '$layout' not found.");
+				return;
+			}
+
+			$renderView = function() use ($path, $model) {
+				include $path;
+			};
+
+			include $lf;
+		}
+		else
+			include $path;
 	}
 	
 	public static function buildUrl($action, $id=-1) {

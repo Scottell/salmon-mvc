@@ -33,7 +33,7 @@ class sampleController {
 		
 		//R::trash(R::load('sample', $id));
 		
-		return new Result(Action::VIEW);
+		return new Result(Action::VIEW, true);
 	}
 	
 	public function index() {
