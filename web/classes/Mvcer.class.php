@@ -54,7 +54,7 @@ class Mvcer {
 		//$opts["id"] = $id;
 		
 		// prevent controller from outputting response
-		ob_start();
+		//ob_start();
 		
 		try {
 
@@ -63,11 +63,11 @@ class Mvcer {
 
 		} catch (exception $e) {
 
-			$r = new Result(Action::SHARED, "error");
+			$r = new Result(Action::SHARED, null, false, "error");
 		}
 		
 		// throw away any response
-		ob_end_clean();
+		//ob_end_clean();
 		
 		if (is_null($r)) return;
 
@@ -90,7 +90,11 @@ class Mvcer {
 		}
 		elseif ($r->getAction() == Action::SHARED) {
 
-			$share = $r->getSubject();
+			$share = $r->getView();
+
+			if (is_null($share))
+				$share = $_view;
+
 			$vf = "views/shared/$share.php";
 			if (!file_exists($vf)) {
 				echo("Shared view '$share' not found.");
@@ -99,7 +103,7 @@ class Mvcer {
 			
 			self::renderView($vf,
 				$r->getUseLayout(),
-				null);
+				$r->getSubject());
 		}
 	}
 
