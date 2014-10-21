@@ -1,7 +1,7 @@
 <?php
 
-final class Action
-{ 
+final class Activity
+{
   const NONE = 1;
   const VIEW = 2;
   const JSON = 3;

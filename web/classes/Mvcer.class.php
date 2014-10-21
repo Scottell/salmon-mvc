@@ -63,7 +63,7 @@ class Mvcer {
 
 		} catch (exception $e) {
 
-			$r = new Result(Action::SHARED, null, false, "error");
+			$r = new Result(Activity::SHARED, null, false, "error");
 		}
 		
 		// throw away any response
@@ -71,7 +71,7 @@ class Mvcer {
 		
 		if (is_null($r)) return;
 
-		if ($r->getAction() == Action::VIEW) {
+		if ($r->getActivity() == Activity::VIEW) {
 
 			$vf = "views/$_model/$_view.php";
 			if (!file_exists($vf)) {
@@ -83,12 +83,12 @@ class Mvcer {
 				$r->getUseLayout(),
 				$r->getSubject());
 		}
-		elseif ($r->getAction() == Action::JSON) {
+		elseif ($r->getActivity() == Activity::JSON) {
 
 			header("Content-type: application/json");
 			echo json_encode($r->getSubject());
 		}
-		elseif ($r->getAction() == Action::SHARED) {
+		elseif ($r->getActivity() == Activity::SHARED) {
 
 			$share = $r->getView();
 

@@ -2,7 +2,7 @@
 
 class Result {
 	
-	private $action;
+	private $activity;
 	private $subject;
 	private $useLayout;
 	private $view;
@@ -12,14 +12,14 @@ class Result {
 		$layout = false,
 		$v = NULL) {
 	
-		$this->action = $a;
+		$this->activity = $a;
 		$this->subject = $s;
 		$this->useLayout = $layout;
 		$this->view = $v;
 	}
 	
-	public function getAction() {
-		return $this->action;
+	public function getActivity() {
+		return $this->activity;
 	}
 	
 	public function getSubject() {

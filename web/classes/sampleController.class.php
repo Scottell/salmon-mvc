@@ -8,7 +8,7 @@ class sampleController {
 		
 		if (!Login::isLoggedIn()) {
 			
-			return new Result(Action::SHARED, "login");
+			return new Result(Activity::SHARED, "login");
 		}
 		
 		if ($_POST["name"] != NULL) {
@@ -21,26 +21,26 @@ class sampleController {
 			$success = true;
 		}
 		
-		return new Result(Action::VIEW);
+		return new Result(Activity::VIEW);
 	}
 	
 	public function delete($id) {
 		
 		if (!Login::isLoggedIn()) {
 			
-			return new Result(Action::SHARED, "login");
+			return new Result(Activity::SHARED, "login");
 		}
 		
 		//R::trash(R::load('sample', $id));
 		
-		return new Result(Action::VIEW, true);
+		return new Result(Activity::VIEW, true);
 	}
 	
 	public function index() {
 	
 		//$model = R::findAll("sample", "order by id");
 	
-		return new Result(Action::VIEW, $model);
+		return new Result(Activity::VIEW, $model);
 	}
 
 	public function fail() {
