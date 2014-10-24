@@ -6,6 +6,7 @@ final class Activity
   const VIEW = 2;
   const JSON = 3;
   const SHARED = 4;
+  const IMAGE = 5;
 }
 
 ?>

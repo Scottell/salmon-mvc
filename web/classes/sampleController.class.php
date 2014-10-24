@@ -47,6 +47,16 @@ class sampleController {
 
 		throw new exception("test");
 	}
+
+    public function image() {
+
+        $p = "images/logo.png";
+        $handle = fopen($p, "r");
+        $contents = fread($handle, filesize($p));
+        fclose($handle);
+
+        return new Result(Activity::IMAGE, $contents, "image/png");
+    }
 }
 
 ?>

@@ -71,7 +71,8 @@ class Mvcer {
 		
 		if (is_null($r)) return;
 
-		if ($r->getActivity() == Activity::VIEW) {
+		$activity = $r->getActivity();
+		if ($activity == Activity::VIEW) {
 
 			$vf = "views/$_model/$_view.php";
 			if (!file_exists($vf)) {
@@ -83,12 +84,12 @@ class Mvcer {
 				$r->getUseLayout(),
 				$r->getSubject());
 		}
-		elseif ($r->getActivity() == Activity::JSON) {
+		elseif ($activity == Activity::JSON) {
 
 			header("Content-type: application/json");
 			echo json_encode($r->getSubject());
 		}
-		elseif ($r->getActivity() == Activity::SHARED) {
+		elseif ($activity == Activity::SHARED) {
 
 			$share = $r->getView();
 
@@ -104,6 +105,11 @@ class Mvcer {
 			self::renderView($vf,
 				$r->getUseLayout(),
 				$r->getSubject());
+		}
+		elseif ($activity == Activity::IMAGE) {
+
+			header("Content-type: $r->getView()");
+			echo $r->getSubject();
 		}
 	}
 
