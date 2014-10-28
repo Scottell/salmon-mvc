@@ -2,11 +2,12 @@
 
 class Mvcer {
 	
-	private static $_model, $_view, $_base;
+	private static $controller, $action, $baseDir;
 	
 	public static $layout = "_layout";
 
-	public static function run($defaultModel = NULL, $defaultView = "index") {
+	public static function run($defaultController = NULL,
+		$defaultAction = "index") {
 		
 		//echo  $_SERVER['PHP_SELF'];
 		
@@ -27,14 +28,14 @@ class Mvcer {
 		
 		// start from {site root}.  use script url to find
 		$idx = count(explode('/',  $_SERVER['PHP_SELF'])) - 1; 
-		self::$_base = dirname($_SERVER['PHP_SELF']);
+		self::$baseDir = dirname($_SERVER['PHP_SELF']);
 		
 		// get controller
-		self::$_model = $_model = $params[$idx] ?  $params[$idx++] : $defaultModel;
-		$cn = $_model . "Controller";
+		self::$controller = $controller = $params[$idx] ?  $params[$idx++] : $defaultController;
+		$cn = $controller . "Controller";
 		
 		if (!class_exists($cn)) {
-			echo("No controller found for model '$_model'.");
+			echo("No controller found for model '$controller'.");
 			die();
 		}
 		
@@ -42,8 +43,8 @@ class Mvcer {
 		$c = new $cn;
 		
 		// get controller method
-		self::$_view = $_view = $params[$idx] ? $params[$idx++] : $defaultView;
-		if (!is_callable(array($c, $_view))) {
+		self::$action = $action = $params[$idx] ? $params[$idx++] : $defaultAction;
+		if (!is_callable(array($c, $action))) {
 		
 			// todo: add error page functionality
 			echo "page not found";
@@ -59,7 +60,7 @@ class Mvcer {
 		try {
 
 			// call controller method
-			$r = call_user_func(array($c, $_view), $id);
+			$r = call_user_func(array($c, $action), $id);
 
 		} catch (exception $e) {
 
@@ -74,9 +75,9 @@ class Mvcer {
 		$activity = $r->getActivity();
 		if ($activity == Activity::VIEW) {
 
-			$vf = "views/$_model/$_view.php";
+			$vf = "views/$controller/$action.php";
 			if (!file_exists($vf)) {
-				echo("View '$_view' not found for model '$_model'.");
+				echo("View '$action' not found for model '$controller'.");
 				return;
 			}
 
@@ -94,7 +95,7 @@ class Mvcer {
 			$share = $r->getView();
 
 			if (is_null($share))
-				$share = $_view;
+				$share = $action;
 
 			$vf = "views/shared/$share.php";
 			if (!file_exists($vf)) {
@@ -134,12 +135,14 @@ class Mvcer {
 			include $path;
 	}
 	
-	public static function buildUrl($action, $id=-1) {
+	public static function buildUrl($action,
+		$id=NULL,
+		$controller=NULL) {
 	
-		return self::$_base . "/" .
-				self::$_model . "/" . 
-				$action . 
-				($id > -1 ? '/' . $id : '');
+		return self::$baseDir . "/" .
+				($controller == null ? self::$controller : $controller) .
+				"/" . $action .
+				($id != NULL ? '/' . $id : '');
 	}
 }
 
