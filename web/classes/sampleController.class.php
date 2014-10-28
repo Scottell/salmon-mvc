@@ -8,7 +8,7 @@ class sampleController {
 		
 		if (!Login::isLoggedIn()) {
 			
-			return new Result(Activity::SHARED, "login");
+			return new Result(Activity::SHARED, NULL, false, "login");
 		}
 		
 		if ($_POST["name"] != NULL) {
@@ -28,12 +28,12 @@ class sampleController {
 		
 		if (!Login::isLoggedIn()) {
 			
-			return new Result(Activity::SHARED, "login");
+			return new Result(Activity::SHARED, NULL, false, "login");
 		}
 		
 		//R::trash(R::load('sample', $id));
 		
-		return new Result(Activity::VIEW, true);
+		return new Result(Activity::VIEW, NULL, true);
 	}
 	
 	public function index() {
@@ -55,7 +55,7 @@ class sampleController {
         $contents = fread($handle, filesize($p));
         fclose($handle);
 
-        return new Result(Activity::IMAGE, $contents, "image/png");
+        return new Result(Activity::IMAGE, $contents, false, "image/png");
     }
 }
 
