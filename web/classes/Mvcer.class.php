@@ -5,6 +5,7 @@ class Mvcer {
 	private static $controller, $action, $baseDir;
 	
 	public static $layout = "_layout";
+	public static $contentDir = "content";
 
 	public static function run($defaultController = NULL,
 		$defaultAction = "index") {
@@ -143,6 +144,13 @@ class Mvcer {
 				($controller == null ? self::$controller : $controller) .
 				"/" . $action .
 				($id != NULL ? '/' . $id : '');
+	}
+
+	public static function getContentUrl($path) {
+
+		return self::$baseDir . "/" .
+			self::$contentDir . "/" .
+			$path;
 	}
 }
 
