@@ -8,7 +8,7 @@ class sampleController {
 		
 		if (!Login::isLoggedIn()) {
 			
-			return new Result(Activity::SHARED, NULL, false, "login");
+			return new ViewResult(NULL, "login");
 		}
 		
 		if ($_POST["name"] != NULL) {
@@ -21,14 +21,14 @@ class sampleController {
 			$success = true;
 		}
 		
-		return new Result(Activity::VIEW);
+		return new ViewResult();
 	}
 	
 	public function delete($id) {
 		
 		if (!Login::isLoggedIn()) {
 			
-			return new Result(Activity::SHARED, NULL, false, "login");
+			return new ViewResult(NULL, "login");
 		}
 		
 		//R::trash(R::load('sample', $id));
@@ -40,7 +40,7 @@ class sampleController {
 	
 		//$model = R::findAll("sample", "order by id");
 	
-		return new Result(Activity::VIEW, $model);
+		return new ViewResult($model);
 	}
 
 	public function fail() {
@@ -55,7 +55,7 @@ class sampleController {
         $contents = fread($handle, filesize($p));
         fclose($handle);
 
-        return new Result(Activity::IMAGE, $contents, false, "image/png");
+        return new ImageResult($contents, "image/png");
     }
 }
 

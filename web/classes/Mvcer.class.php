@@ -65,77 +65,68 @@ class Mvcer {
 
 		} catch (exception $e) {
 
-			$r = new Result(Activity::SHARED, null, false, "error");
+			$r = new ViewResult(null, "error");
 		}
 		
 		// throw away any response
 		//ob_end_clean();
-		
+
 		if (is_null($r)) return;
 
-		$activity = $r->getActivity();
-		if ($activity == Activity::VIEW) {
+		//$activity = $r->getActivity();
+		//if ($activity == Activity::VIEW) {
+        if ($r instanceof ViewResult) {
 
-			$vf = "views/$controller/$action.php";
+            $c = is_null($r->controller) ? $controller : $r->controller;
+            $v = is_null($r->view) ? $action : $r->view;
+
+			$vf = "views/$c/$v.php";
+
 			if (!file_exists($vf)) {
-				echo("View '$action' not found for model '$controller'.");
-				return;
+
+                $vf = "views/shared/$v.php";
+
+                if (!file_exists($vf)) {
+
+                    echo("View '$v' not found.");
+				    return;
+                }
 			}
 
-			self::renderView($vf,
-				$r->getUseLayout(),
-				$r->getSubject());
+            $model = $r->model;
+
+            if ($r->layout) {
+
+                $layout = self::$layout;
+                $lf = "views/shared/$layout.php";
+                if (!file_exists($lf)) {
+                    echo("Layout page '$layout' not found.");
+                    return;
+                }
+
+                $renderView = function() use ($vf, $model) {
+                    include $vf;
+                };
+
+                include $lf;
+            }
+            else
+                include $vf;
 		}
-		elseif ($activity == Activity::JSON) {
+		elseif ($r instanceof JsonResult) {
 
 			header("Content-type: application/json");
-			echo json_encode($r->getSubject());
+			echo json_encode($r->object);
 		}
-		elseif ($activity == Activity::SHARED) {
+		elseif ($r instanceof ImageResult) {
 
-			$share = $r->getView();
+            if (!is_null($r->type))
+                header("Content-type: $r->type");
 
-			if (is_null($share))
-				$share = $action;
-
-			$vf = "views/shared/$share.php";
-			if (!file_exists($vf)) {
-				echo("Shared view '$share' not found.");
-				return;
-			}
-			
-			self::renderView($vf,
-				$r->getUseLayout(),
-				$r->getSubject());
-		}
-		elseif ($activity == Activity::IMAGE) {
-
-			header("Content-type: $r->getView()");
-			echo $r->getSubject();
+            echo $r->data;
 		}
 	}
 
-	private static function renderView($path, $useLayout, $model) {
-
-		if ($useLayout) {
-
-			$layout = self::$layout;
-			$lf = "views/shared/$layout.php";
-			if (!file_exists($lf)) {
-				echo("Layout page '$layout' not found.");
-				return;
-			}
-
-			$renderView = function() use ($path, $model) {
-				include $path;
-			};
-
-			include $lf;
-		}
-		else
-			include $path;
-	}
-	
 	public static function buildUrl($action,
 		$id=NULL,
 		$controller=NULL) {
