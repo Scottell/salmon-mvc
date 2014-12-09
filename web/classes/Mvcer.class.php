@@ -75,43 +75,43 @@ class Mvcer {
 
 		//$activity = $r->getActivity();
 		//if ($activity == Activity::VIEW) {
-        if ($r instanceof ViewResult) {
+		if ($r instanceof ViewResult) {
 
-            $c = is_null($r->controller) ? $controller : $r->controller;
-            $v = is_null($r->view) ? $action : $r->view;
+			$c = is_null($r->controller) ? $controller : $r->controller;
+			$v = is_null($r->view) ? $action : $r->view;
 
 			$vf = "views/$c/$v.php";
 
 			if (!file_exists($vf)) {
 
-                $vf = "views/shared/$v.php";
+				$vf = "views/shared/$v.php";
 
-                if (!file_exists($vf)) {
+				if (!file_exists($vf)) {
 
-                    echo("View '$v' not found.");
-				    return;
-                }
+					echo("View '$v' not found.");
+					return;
+				}
 			}
 
-            $model = $r->model;
+			$model = $r->model;
 
-            if ($r->layout) {
+			if ($r->layout) {
 
-                $layout = self::$layout;
-                $lf = "views/shared/$layout.php";
-                if (!file_exists($lf)) {
-                    echo("Layout page '$layout' not found.");
-                    return;
-                }
+				$layout = self::$layout;
+				$lf = "views/shared/$layout.php";
+				if (!file_exists($lf)) {
+					echo("Layout page '$layout' not found.");
+					return;
+				}
 
-                $renderView = function() use ($vf, $model) {
-                    include $vf;
-                };
+				$renderView = function() use ($vf, $model) {
+					include $vf;
+				};
 
-                include $lf;
-            }
-            else
-                include $vf;
+				include $lf;
+			}
+			else
+				include $vf;
 		}
 		elseif ($r instanceof JsonResult) {
 
@@ -120,10 +120,10 @@ class Mvcer {
 		}
 		elseif ($r instanceof ImageResult) {
 
-            if (!is_null($r->type))
-                header("Content-type: $r->type");
+			if (!is_null($r->type))
+				header("Content-type: $r->type");
 
-            echo $r->data;
+			echo $r->data;
 		}
 	}
 
