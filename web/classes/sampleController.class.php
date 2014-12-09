@@ -19,6 +19,8 @@ class sampleController {
 	
 			global $success;
 			$success = true;
+
+			return new RedirectResult("index", null, null, array("hi" => "y", "f" => "a"));
 		}
 		
 		return new ViewResult();

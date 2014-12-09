@@ -125,6 +125,25 @@ class Mvcer {
 
 			echo $r->data;
 		}
+		elseif ($r instanceof RedirectResult) {
+
+			if (is_array($r->query)) {
+
+				$q = "?";
+				foreach ($r->query as $k => $v) {
+
+					$q .= "$k=$v&";
+				}
+				$q = rtrim($q, "&");
+			}
+
+			$url = self::buildUrl($r->action,
+								  $r->id,
+								  is_null($r->controller) ? $controller : $r->controller)
+				. $q;
+
+			header("Location: $url");
+		}
 	}
 
 	public static function buildUrl($action,
