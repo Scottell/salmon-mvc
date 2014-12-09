@@ -35,7 +35,7 @@ class sampleController {
 		
 		//R::trash(R::load('sample', $id));
 		
-		return new Result(Activity::VIEW, NULL, true);
+		return new RedirectResult("index");
 	}
 	
 	public function index() {
