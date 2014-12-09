@@ -57,6 +57,11 @@ class sampleController {
 
         return new ImageResult($contents, "image/png");
     }
+
+    public function json() {
+
+        return new JsonResult(array("Hi" => "hello"));
+    }
 }
 
 ?>
