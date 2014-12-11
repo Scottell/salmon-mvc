@@ -2,7 +2,7 @@
 
 class ViewResult {
 
-    public $model, $view, $layout, $controller, $shared;
+    public $model, $view, $layout, $controller;
 
     function __construct($model = null,
                          $view = null,
