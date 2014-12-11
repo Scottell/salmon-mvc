@@ -65,7 +65,7 @@ class Mvcer {
 
 		} catch (exception $e) {
 
-			$r = new ViewResult(null, "error");
+			$r = new ViewResult($e, "error");
 		}
 		
 		// throw away any response
