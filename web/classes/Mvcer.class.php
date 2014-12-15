@@ -6,6 +6,7 @@ class Mvcer {
 	
 	public static $layout = "_layout";
 	public static $contentDir = "content";
+	public static $internalPrefix = "_";
 
 	public static function run($defaultController = NULL,
 		$defaultAction = "index") {
@@ -33,6 +34,46 @@ class Mvcer {
 		
 		// get controller
 		self::$controller = $controller = $params[$idx] ?  $params[$idx++] : $defaultController;
+
+		// get controller method
+		self::$action = $action = $params[$idx] ? $params[$idx++] : $defaultAction;
+
+		if (!is_null(self::$internalPrefix) &&
+			strpos($action, self::$internalPrefix) === 0) {
+
+			echo "Page not allowed";
+			return;
+		}
+
+		$id = count($params) > 2 ? $params[$idx++] : NULL;
+
+		self::renderAction(null, $id);
+	}
+
+	public static function buildUrl($action,
+		$id=NULL,
+		$controller=NULL) {
+
+		return self::$baseDir . "/" .
+				($controller == null ? self::$controller : $controller) .
+				"/" . $action .
+				($id != NULL ? '/' . $id : '');
+	}
+
+	public static function getContentUrl($path) {
+
+		return self::$baseDir . "/" .
+			self::$contentDir . "/" .
+			$path;
+	}
+
+	public static function renderAction($action = null,
+										$id = null,
+										$controller = null) {
+
+		if (is_null($controller)) $controller = self::$controller;
+		if (is_null($action)) $action = self::$action;
+
 		$cn = $controller . "Controller";
 		
 		if (!class_exists($cn)) {
@@ -44,15 +85,13 @@ class Mvcer {
 		$c = new $cn;
 		
 		// get controller method
-		self::$action = $action = $params[$idx] ? $params[$idx++] : $defaultAction;
 		if (!is_callable(array($c, $action))) {
 		
 			// todo: add error page functionality
 			echo "page not found";
 			return;
 		}
-		
-		$id = count($params) > 2 ? $params[$idx++] : NULL;
+
 		//$opts["id"] = $id;
 		
 		// prevent controller from outputting response
@@ -144,23 +183,6 @@ class Mvcer {
 
 			header("Location: $url");
 		}
-	}
-
-	public static function buildUrl($action,
-		$id=NULL,
-		$controller=NULL) {
-	
-		return self::$baseDir . "/" .
-				($controller == null ? self::$controller : $controller) .
-				"/" . $action .
-				($id != NULL ? '/' . $id : '');
-	}
-
-	public static function getContentUrl($path) {
-
-		return self::$baseDir . "/" .
-			self::$contentDir . "/" .
-			$path;
 	}
 }
 

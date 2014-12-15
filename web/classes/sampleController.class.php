@@ -64,6 +64,11 @@ class sampleController {
 
         return new JsonResult(array("Hi" => "hello"));
     }
+
+	public function _partial() {
+
+		return new ViewResult(null, null, null, false);
+	}
 }
 
 ?>
