@@ -1,3 +1,3 @@
 <p>
-	This is a view!
+	This is a view! (via <?=$model["via"]?>)
 </p>

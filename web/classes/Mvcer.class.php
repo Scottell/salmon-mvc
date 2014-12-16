@@ -116,41 +116,10 @@ class Mvcer {
 		//if ($activity == Activity::VIEW) {
 		if ($r instanceof ViewResult) {
 
-			$c = is_null($r->controller) ? $controller : $r->controller;
-			$v = is_null($r->view) ? $action : $r->view;
+			if (is_null($r->controller)) $r->controller = $controller;
+			if (is_null($r->view)) $r->view = $action;
 
-			$vf = "views/$c/$v.php";
-
-			if (!file_exists($vf)) {
-
-				$vf = "views/shared/$v.php";
-
-				if (!file_exists($vf)) {
-
-					echo("View '$v' not found.");
-					return;
-				}
-			}
-
-			$model = $r->model;
-
-			if ($r->layout) {
-
-				$layout = self::$layout;
-				$lf = "views/shared/$layout.php";
-				if (!file_exists($lf)) {
-					echo("Layout page '$layout' not found.");
-					return;
-				}
-
-				$renderView = function() use ($vf, $model) {
-					include $vf;
-				};
-
-				include $lf;
-			}
-			else
-				include $vf;
+			self::renderViewResult($r);
 		}
 		elseif ($r instanceof JsonResult) {
 
@@ -183,6 +152,53 @@ class Mvcer {
 
 			header("Location: $url");
 		}
+	}
+
+	private static function renderViewResult(ViewResult $r) {
+
+		$vf = "views/$r->controller/$r->view.php";
+
+		if (!file_exists($vf)) {
+
+			$vf = "views/shared/$r->view.php";
+
+			if (!file_exists($vf)) {
+
+				echo("View '$v' not found.");
+				return;
+			}
+		}
+
+		$model = $r->model;
+
+		if ($r->layout) {
+
+			$layout = self::$layout;
+			$lf = "views/shared/$layout.php";
+			if (!file_exists($lf)) {
+				echo("Layout page '$layout' not found.");
+				return;
+			}
+
+			$renderView = function() use ($vf, $model) {
+				include $vf;
+			};
+
+			include $lf;
+		}
+		else
+			include $vf;
+	}
+
+	public static function renderView($view,
+									  $model = null,
+									  $controller = null,
+									  $layout = false) {
+
+		self::renderViewResult(new ViewResult($model,
+											  $view,
+											  is_null($controller) ? self::$controller : $controller,
+											  $layout));
 	}
 }
 

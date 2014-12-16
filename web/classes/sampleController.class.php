@@ -67,7 +67,7 @@ class sampleController {
 
 	public function _partial() {
 
-		return new ViewResult(null, null, null, false);
+		return new ViewResult(array("via" => "renderAction"), null, null, false);
 	}
 }
 
