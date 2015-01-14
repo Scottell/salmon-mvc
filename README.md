@@ -3,4 +3,4 @@ salmon-mvc
 
 A lightweight MVC framework for PHP
 
-![logo](http://www.salmonsalvo.net/images/salmon-mvc.png)
+![logo](https://raw.githubusercontent.com/Scottell/salmon-mvc/master/web/images/logo.png)
