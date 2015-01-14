@@ -11,14 +11,14 @@ class sampleController {
 			return new ViewResult(NULL, "login");
 		}
 		
-		if ($_POST["name"] != NULL) {
+		if (Mvcer::isPost()) {
 		
 			//$sample = R::dispense('sample');
 			//$sample->name = $_POST["name"];
 			//$id = R::store($sample);
 	
-			global $success;
-			$success = true;
+			session_start();
+			$_SESSION["success"] = true;
 
 			return new RedirectResult("index", null, null, array("hi" => "y", "f" => "a"));
 		}
@@ -41,7 +41,8 @@ class sampleController {
 	public function index() {
 	
 		//$model = R::findAll("sample", "order by id");
-	
+		session_start();
+
 		return new ViewResult($model);
 	}
 

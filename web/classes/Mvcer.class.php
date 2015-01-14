@@ -200,6 +200,11 @@ class Mvcer {
 											  is_null($controller) ? self::$controller : $controller,
 											  $layout));
 	}
+
+	public static function isPost() {
+
+			return $_SERVER['REQUEST_METHOD'] === 'POST';
+	}
 }
 
 ?>

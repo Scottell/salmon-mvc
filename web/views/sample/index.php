@@ -1,3 +1,6 @@
+<? if ($_SESSION["success"]): ?>
+	Thing added!<br />
+<? endif; ?>
 
 <table>
 	<tr><th>name</th></tr>

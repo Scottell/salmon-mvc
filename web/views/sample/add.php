@@ -1,7 +1,3 @@
-<? if ($GLOBALS["success"]): ?>
-Added
-<? endif; ?>
-
 <form method="post" action="<?=Mvcer::buildUrl('add')?>">
 	Name: <input type="text" name="name"/>
 	<input type="submit" name="" value="Add" />
