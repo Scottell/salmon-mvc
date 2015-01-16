@@ -8,6 +8,8 @@ class Mvcer {
 	public static $contentDir = "content";
 	public static $internalPrefix = "_";
 
+	private static $handled = false;
+
 	public static function run($defaultController = NULL,
 		$defaultAction = "index") {
 		
@@ -203,7 +205,12 @@ class Mvcer {
 
 	public static function isPost() {
 
-			return $_SERVER['REQUEST_METHOD'] === 'POST';
+		return $_SERVER['REQUEST_METHOD'] === 'POST' && !self::$handled;
+	}
+
+	public static function postHandled() {
+
+		self::$handled = true;
 	}
 }
 

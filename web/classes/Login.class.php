@@ -14,6 +14,7 @@ class Login {
 		if ($_POST['pw'] == 'password')  {
 					
 			$_SESSION[$key] = true;
+			Mvcer::postHandled();
 			return true;
 		}
 		
